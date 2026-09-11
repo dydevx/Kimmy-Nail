@@ -3,9 +3,16 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Kimmy Nails Augsburg – Nageldesign, Maniküre, Pediküre und Wimpernverlängerung in ruhiger Atmosphäre.">
+  <meta name="description" content="Professionelles Nagelstudio in Augsburg. Erleben Sie erstklassige Maniküre, Pediküre und Nageldesign in entspannter Atmosphäre. Hofackerstraße 10, 86179 Augsburg.">
+  <meta name="keywords" content="Nagelstudio Augsburg, Maniküre, Pediküre, Nageldesign, Nail Art, Pulver-Gel, Flüssig-Gel, Wimpern, Kimmy Nails">
   <meta name="theme-color" content="#fdf9f5">
-  <title>Kimmy Nails | Nagelstudio Augsburg</title>
+  <meta property="og:title" content="Kimmy Nails - Luxury Nail Salon Augsburg">
+  <meta property="og:description" content="Professionelles Nagelstudio in Augsburg. Erstklassige Maniküre, Pediküre und Nageldesign.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://kimmynail.de">
+  <meta property="og:image" content="https://kimmynail.de/images/Hero_Hands.webp">
+  <meta name="twitter:card" content="summary_large_image">
+  <title>Kimmy Nails - Luxury Nail Salon Augsburg</title>
   <link rel="icon" href="public/favicon.png">
   <link rel="apple-touch-icon" href="public/apple-touch-icon.png">
   <link rel="preload" href="public/images/Hero_Hands.webp" as="image">
@@ -24,7 +31,7 @@
         <a href="#faq">FAQ</a>
         <a href="#contact">Kontakt</a>
       </div>
-      <a class="book-nav desktop-only" href="#booking">Buchen</a>
+      <a class="book-nav mask-button desktop-only" href="#booking" data-label="Buchen">Buchen</a>
       <button class="menu-button mobile-only" type="button" aria-label="Menü öffnen" aria-expanded="false" data-menu-open><span></span><span></span><span></span></button>
     </nav>
     <div class="mobile-menu" aria-hidden="true" data-mobile-menu>
@@ -33,21 +40,24 @@
       <div class="mobile-menu-links">
         <a style="--i:0" href="#about">Über uns</a><a style="--i:1" href="#services">Leistungen &amp; Preise</a><a style="--i:2" href="#gallery">Galerie</a><a style="--i:3" href="#booking">Buchung</a><a style="--i:4" href="#faq">FAQ</a><a style="--i:5" href="#contact">Kontakt</a>
       </div>
-      <a class="gold-button" href="#booking">Termin buchen</a>
+      <a class="gold-button" href="#booking">Jetzt Buchen</a>
+      <div class="mobile-menu-meta"><span>Termin vereinbaren</span><span>Mo–Sa • 9:00–19:00</span></div>
     </div>
   </header>
 
   <main>
     <section class="hero" aria-labelledby="hero-title">
       <div class="nav-marker" data-nav-marker></div>
-      <h1 class="hero-copy hero-copy--left" id="hero-title"><span>Ruhige</span><span>Momente.</span></h1>
-      <div class="hero-image-wrap"><img class="hero-hand" src="public/images/Hero_Hands.webp" alt="Elegant manikürte Hände mit goldenen Nagelspitzen"><a class="hero-book" href="#booking">Buchen</a></div>
-      <p class="hero-copy hero-copy--right" aria-hidden="true"><span>Gepflegte</span><span>Nägel.</span></p>
+      <div class="back-to-top-marker" data-back-to-top-marker></div>
+      <h1 class="hero-copy hero-copy--left" id="hero-title" aria-label="Ruhige Momente. Gepflegte Nägel."><span data-line-delay="0.5">Ruhige</span><span data-line-delay="0.8">Gepflegte</span></h1>
+      <div class="hero-image-wrap"><span class="hero-glow hero-glow--pink" aria-hidden="true"></span><span class="hero-glow hero-glow--gold" aria-hidden="true"></span><span class="hero-glow hero-glow--pink-inner" aria-hidden="true"></span><img class="hero-hand" src="public/images/Hero_Hands.webp" alt="Elegant manikürte Hände mit goldenen Nagelspitzen"><a class="hero-book mask-button" href="#booking" data-label="Buchen">Buchen</a></div>
+      <p class="hero-copy hero-copy--right" aria-hidden="true"><span data-line-delay="1.1">Momente.</span><span data-line-delay="1.4">Nägel.</span></p>
       <div class="hero-fade" aria-hidden="true"></div>
     </section>
 
     <section id="about" class="about section-pad">
       <div class="about-grid">
+        <span class="section-label about-mobile-label mobile-only">Über uns</span>
         <div class="organic-frame"><span class="halo halo--gold"></span><span class="halo halo--pink"></span><img id="about-image" src="public/images/studio_pedikure.webp" alt="Behandlung im Kimmy Nails Studio" loading="lazy"></div>
         <div class="about-copy reveal"><span class="section-label">Über uns</span><h2 id="about-title">Unser Studio</h2><span class="gold-line" aria-hidden="true"></span><p id="about-text">Ein kleines, gepflegtes Studio mit ruhiger Atmosphäre. Reduziert, ordentlich und angenehm gestaltet.</p>
           <div class="slider-dots" aria-label="Studio Bilder" data-about-dots>
@@ -55,23 +65,24 @@
             <button type="button" aria-label="Bild 2 anzeigen" data-title="Unser Studio" data-text="Wir arbeiten präzise und mit Blick fürs Detail. Saubere Ergebnisse stehen für uns im Vordergrund." data-image="public/images/studio_manicure.webp"></button>
             <button type="button" aria-label="Bild 3 anzeigen" data-title="Unser Team" data-text="Freundlich, aufmerksam und erfahren. Wir nehmen uns Zeit für jede Kundin und jeden Kunden." data-image="public/images/studio_team.jpg"></button>
           </div>
+          <div class="swipe-hint mobile-only" aria-hidden="true">← Wischen →</div>
         </div>
       </div>
     </section>
 
     <section id="services" class="services section-pad">
-      <div class="section-head reveal"><span class="section-label">Leistungen &amp; Preise</span><h2>Unsere Leistungen</h2><span class="gold-line" aria-hidden="true"></span><p>Von der kurzen Auffrischung bis zur ausführlichen Nagelpflege. Wir arbeiten hygienisch und präzise, damit Sie sich wohlfühlen.</p></div>
+      <div class="section-head reveal"><span class="section-label">Leistungen &amp; Preise</span><h2>Unsere Leistungen</h2><span class="gold-line" aria-hidden="true"></span><p>Von der kurzen Auffrischung bis zur ausführlichen Nagelpflege – Wir arbeiten hygienisch und präzise, damit Sie sich wohlfühlen.</p></div>
       <div class="service-grid" data-service-grid>
         <article class="service-card reveal is-current"><div class="organic-frame"><span class="halo halo--gold"></span><span class="halo halo--pink"></span><img src="public/images/studio_manicure.webp" alt="Nail Design" loading="lazy"></div><span class="service-number">01</span><h3>Nail Design</h3><span class="short-line"></span><p>Von dezenten, minimalistischen Designs bis hin zu aufwendigen, handgemalten Kunstwerken. Unsere Künstler verwenden hochwertige Gele.</p></article>
         <article class="service-card reveal"><div class="organic-frame"><span class="halo halo--gold"></span><span class="halo halo--pink"></span><img src="public/images/studio_pedikure.webp" alt="Hand- und Fußpflege" loading="lazy"></div><span class="service-number">02</span><h3>Hand- &amp; Fußpflege</h3><span class="short-line"></span><p>Luxuriöse Maniküre und Pediküre mit warmen Bädern, Peelings, Nagelpflege und entspannenden Massagen.</p></article>
         <article class="service-card reveal"><div class="organic-frame"><span class="halo halo--gold"></span><span class="halo halo--pink"></span><img src="public/images/wimpern_extensions.webp" alt="Wimpernverlängerung" loading="lazy"></div><span class="service-number">03</span><h3>Wimpernverlängerung</h3><span class="short-line"></span><p>Verschönern Sie Ihre natürliche Schönheit mit unseren Premium-Wimpernverlängerungen, angepasst an Ihre Augenform.</p></article>
       </div>
       <div class="service-mobile-controls mobile-only"><button type="button" aria-label="Vorherige Leistung" data-service-prev>←</button><div class="slider-dots" data-service-dots><button class="active" type="button" aria-label="Leistung 1"></button><button type="button" aria-label="Leistung 2"></button><button type="button" aria-label="Leistung 3"></button></div><button type="button" aria-label="Nächste Leistung" data-service-next>→</button></div>
-      <button class="outline-button reveal" type="button" data-open-prices>Alle Leistungen</button>
+      <button class="outline-button mask-button reveal" type="button" data-label="Alle Leistungen" data-open-prices>Alle Leistungen</button>
     </section>
 
     <section id="gallery" class="gallery section-pad">
-      <div class="section-head reveal"><span class="section-label">Galerie</span><h2>Für Ihren nächsten Look</h2><span class="gold-line" aria-hidden="true"></span><p>Lassen Sie sich inspirieren und finden Sie den Stil, der zu Ihnen passt.</p></div>
+      <div class="section-head reveal"><span class="section-label">Gallerie</span><h2><span class="desktop-copy">Für Ihren nächsten Look</span><span class="mobile-copy">Ideen für Ihren Look</span></h2><span class="gold-line" aria-hidden="true"></span><p><span class="desktop-copy">Lassen Sie sich inspirieren und finden Sie den Stil, der zu Ihnen passt.</span><span class="mobile-copy">Lassen Sie sich inspirieren.</span></p></div>
       <div class="gallery-grid" data-gallery>
         <button class="gallery-item gallery-item--0 reveal" type="button"><img src="public/images/gallery/gallery_1.webp" alt="Nageldesign Inspiration 1" loading="lazy"><span>View</span></button>
         <button class="gallery-item gallery-item--1 reveal" type="button"><img src="public/images/gallery/gallery_2.webp" alt="Nageldesign Inspiration 2" loading="lazy"><span>View</span></button>
@@ -90,13 +101,13 @@
         <button class="gallery-item gallery-item--2 reveal" type="button" hidden data-gallery-extra><img src="public/images/gallery/gallery_15.webp" alt="Nageldesign Inspiration 15" loading="lazy"><span>View</span></button>
         <button class="gallery-item gallery-item--3 reveal" type="button" hidden data-gallery-extra><img src="public/images/gallery/gallery_16.webp" alt="Nageldesign Inspiration 16" loading="lazy"><span>View</span></button>
       </div>
-      <button class="outline-button" type="button" data-gallery-toggle>Alle ansehen</button>
+      <button class="outline-button mask-button" type="button" data-label="Alle ansehen" data-gallery-toggle>Alle ansehen</button>
     </section>
 
     <section id="booking" class="booking">
       <div class="reviews-panel"><div class="section-head"><span class="section-label">Meinungen</span><h2>Einige Eindrücke</h2><span class="gold-line"></span></div><blockquote class="review-card"><span class="quote-mark">“</span><p data-review-text>Wunderschönes Ergebnis und tolle Atmosphäre.</p><footer><strong data-review-name>Sarah K.</strong><span data-review-date>März 2026</span></footer><div class="stars" aria-label="5 von 5 Sternen">★★★★★</div></blockquote><div class="slider-dots" data-review-dots><button class="active" type="button" aria-label="Bewertung 1" data-text="Wunderschönes Ergebnis und tolle Atmosphäre." data-name="Sarah K." data-date="März 2026"></button><button type="button" aria-label="Bewertung 2" data-text="Endlich ein Studio, das meine Wünsche versteht." data-name="Maria L." data-date="März 2026"></button><button type="button" aria-label="Bewertung 3" data-text="Sehr sauber und professionell. Komme wieder!" data-name="Julia S." data-date="März 2026"></button></div></div>
       <div class="booking-panel">
-        <div class="section-head"><span class="section-label">Buchung</span><h2>Ihren Termin buchen</h2><span class="gold-line"></span></div>
+        <div class="section-head"><span class="section-label">Buchung</span><h2><span class="desktop-copy">Ihren Termin buchen</span><span class="mobile-copy">Termin buchen</span></h2><span class="gold-line"></span><p class="mobile-copy">Einfach und schnell online.</p></div>
         <div class="booking-card"><div class="steps" aria-label="Buchungsschritte"><span class="active" data-step-one>1</span><i data-step-line></i><span data-step-two>2</span></div><div class="step-labels"><span>Leistungen</span><span>Termin &amp; Daten</span></div>
           <div class="booking-services" data-booking-services><h3>Wählen Sie Ihre Leistungen</h3>
             <section><h4>Pulver-Gel</h4><div class="select-list"><button type="button"><span>Natur - Neu</span><strong>35,00 €</strong></button><button type="button"><span>Natur - Auffüllen</span><strong>30,00 €</strong></button><button type="button"><span>French - Neu</span><strong>45,00 €</strong></button><button type="button"><span>French - Auffüllen</span><strong>40,00 €</strong></button><button type="button"><span>Glitzer - Neu</span><strong>45,00 €</strong></button><button type="button"><span>Glitzer - Auffüllen</span><strong>40,00 €</strong></button><button type="button"><span>Farbgel - Neu</span><strong>45,00 €</strong></button><button type="button"><span>Farbgel - Auffüllen</span><strong>40,00 €</strong></button><button type="button"><span>Chrom - Neu</span><strong>45,00 €</strong></button><button type="button"><span>Chrom - Auffüllen</span><strong>40,00 €</strong></button><button type="button"><span>Magnetfarbe - Neu</span><strong>50,00 €</strong></button><button type="button"><span>Magnetfarbe - Auffüllen</span><strong>45,00 €</strong></button></div></section>
@@ -112,24 +123,24 @@
       </div>
     </section>
 
-    <section id="faq" class="faq section-pad"><div class="section-head reveal"><span class="section-label">FAQ</span><h2>Häufig gestellte Fragen</h2><span class="gold-line"></span><p>Gut zu wissen vor Ihrem Termin</p></div><div class="faq-list">
+    <section id="faq" class="faq section-pad"><div class="section-head reveal"><span class="section-label">FAQ</span><h2><span class="desktop-copy">Häufig gestellte Fragen</span><span class="mobile-copy">Fragen &amp; Antworten</span></h2><span class="gold-line"></span><p>Gut zu wissen vor Ihrem Termin</p></div><div class="faq-list">
       <article class="faq-item"><button type="button" aria-expanded="false"><span>Brauche ich einen Termin?</span><i>+</i></button><div class="faq-answer"><p>Wir empfehlen eine Terminvereinbarung, spontane Besuche sind je nach Verfügbarkeit möglich.</p></div></article>
-      <article class="faq-item"><button type="button" aria-expanded="false"><span>Wie früh sollte ich zum Termin erscheinen?</span><i>+</i></button><div class="faq-answer"><p>Bitte erscheinen Sie pünktlich zu Ihrem Termin, damit wir uns ausreichend Zeit für Ihre Behandlung nehmen können.</p></div></article>
-      <article class="faq-item"><button type="button" aria-expanded="false"><span>Was soll ich zu meinem Termin mitbringen?</span><i>+</i></button><div class="faq-answer"><p>Sie müssen nichts außer Zeit und Ihren Wunsch mitbringen. Wir kümmern uns um alles Weitere.</p></div></article>
-      <article class="faq-item"><button type="button" aria-expanded="false"><span>Kann ich meine Behandlung vor Ort auswählen?</span><i>+</i></button><div class="faq-answer"><p>Idealerweise haben Sie eine grobe Vorstellung was Sie wollen, jedoch beraten wir Sie gerne vor Ort und stimmen die Behandlung gemeinsam mit Ihnen ab.</p></div></article>
-      <article class="faq-item"><button type="button" aria-expanded="false"><span>Was passiert, wenn ich einen Termin absagen muss?</span><i>+</i></button><div class="faq-answer"><p>Falls Sie einen Termin nicht wahrnehmen können, bitten wir um eine frühzeitige Absage.</p></div></article>
+      <article class="faq-item"><button type="button" aria-expanded="false"><span><span class="desktop-copy">Wie früh sollte ich zum Termin erscheinen?</span><span class="mobile-copy">Wie früh sollte ich erscheinen?</span></span><i>+</i></button><div class="faq-answer"><p>Bitte erscheinen Sie pünktlich zu Ihrem Termin, damit wir uns ausreichend Zeit für Ihre Behandlung nehmen können.</p></div></article>
+      <article class="faq-item"><button type="button" aria-expanded="false"><span><span class="desktop-copy">Was soll ich zu meinem Termin mitbringen?</span><span class="mobile-copy">Was mitbringen?</span></span><i>+</i></button><div class="faq-answer"><p>Sie müssen nichts außer Zeit und Ihren Wunsch mitbringen. Wir kümmern uns um alles Weitere.</p></div></article>
+      <article class="faq-item"><button type="button" aria-expanded="false"><span><span class="desktop-copy">Kann ich meine Behandlung vor Ort auswählen?</span><span class="mobile-copy">Behandlung vor Ort wählen?</span></span><i>+</i></button><div class="faq-answer"><p>Idealerweise haben Sie eine grobe Vorstellung was Sie wollen, jedoch beraten wir Sie gerne vor Ort und stimmen die Behandlung gemeinsam mit Ihnen ab.</p></div></article>
+      <article class="faq-item"><button type="button" aria-expanded="false"><span><span class="desktop-copy">Was passiert, wenn ich einen Termin absagen muss?</span><span class="mobile-copy">Terminabsage?</span></span><i>+</i></button><div class="faq-answer"><p>Falls Sie einen Termin nicht wahrnehmen können, bitten wir um eine frühzeitige Absage.</p></div></article>
     </div></section>
 
     <section id="contact" class="contact">
-      <div class="contact-form-panel"><div class="section-head"><span class="section-label">Kontakt</span><h2>So erreichen Sie uns</h2><span class="gold-line"></span></div><div class="contact-details"><p><b aria-hidden="true">⌖</b><span>Hofackerstraße 10, 86179 Augsburg, Deutschland</span></p><p><b aria-hidden="true">☎</b><a href="tel:+4915112354787">+49 151 12354787</a></p><p><b aria-hidden="true">✉</b><a href="mailto:kimmynails.de@gmail.com">kimmynails.de@gmail.com</a></p><p><b aria-hidden="true">◷</b><span>Mo-Sa: 09:00 - 20:00</span></p></div>
-        <form class="contact-form" data-contact-form><label><span>Ihr Name</span><input type="text" name="name" placeholder="Ihr Name" required></label><label><span>E-Mail-Adresse</span><input type="email" name="email" placeholder="E-Mail-Adresse" required></label><label><span>Telefon</span><input type="tel" name="phone" placeholder="Telefon (optional)"></label><label><span>Ihre Nachricht</span><textarea name="message" placeholder="Ihre Nachricht" rows="4" required></textarea></label><button class="outline-button" type="submit">Nachricht senden</button><p class="form-success" role="status" hidden data-form-success>✓ Vielen Dank! Ihre Nachricht wurde vorbereitet.</p></form>
-        <div class="or"><span>oder</span></div><a class="whatsapp-button" href="https://wa.me/4915112354787" target="_blank" rel="noreferrer">◉ WhatsApp Chat</a>
+      <div class="contact-form-panel"><div class="section-head"><span class="section-label">Kontakt</span><h2>So erreichen Sie uns</h2><span class="gold-line"></span></div><div class="contact-details"><p><b aria-hidden="true">📍</b><span>Hofackerstraße 10, 86179 Augsburg, Deutschland</span></p><p><b aria-hidden="true">📞</b><a href="tel:+4915112354787">+49 151 12354787</a></p><p><b aria-hidden="true">✉️</b><a href="mailto:kimmynails.de@gmail.com">kimmynails.de@gmail.com</a></p><p><b aria-hidden="true">🕐</b><span>Mo-Sa: 09:00 - 20:00</span></p></div>
+        <form class="contact-form" data-contact-form><label><span>Ihr Name</span><input type="text" name="name" placeholder="Ihr Name" required></label><label><span>E-Mail-Adresse</span><input type="email" name="email" placeholder="E-Mail-Adresse" required></label><label><span>Telefon</span><input type="tel" name="phone" placeholder="Telefon (optional)"></label><label><span>Ihre Nachricht</span><textarea name="message" placeholder="Ihre Nachricht" rows="4" required></textarea></label><button class="outline-button mask-button" type="submit" data-label="Nachricht senden">Nachricht senden</button><p class="form-success" role="status" hidden data-form-success>✓ Vielen Dank! Ihre Nachricht wurde vorbereitet.</p></form>
+        <div class="or"><span>oder</span></div><a class="whatsapp-button" href="https://wa.me/4915112354787" target="_blank" rel="noreferrer">💬 WhatsApp Chat</a>
       </div>
       <div class="map-panel"><iframe title="Kimmy Nails Standort" loading="lazy" src="https://www.google.com/maps?q=Hofackerstra%C3%9Fe%2010%2C%2086179%20Augsburg%2C%20Deutschland&amp;output=embed"></iframe><div class="map-card"><b aria-hidden="true">⌖</b><div><h3>Besuchen Sie uns</h3><p>Hofackerstraße 10, 86179 Augsburg, Deutschland</p><a href="https://maps.google.com/?q=Hofackerstraße%2010,%2086179%20Augsburg" target="_blank" rel="noreferrer">Route anzeigen →</a></div></div></div>
     </section>
   </main>
 
-  <footer class="footer"><div class="footer-main"><div class="footer-brand"><a class="brand" href="index.html">KIMMYNAILS</a><h2>Schönheit &amp; Ruhe</h2><span class="footer-line"></span><p>Ein Ort, an dem Kunstfertigkeit auf Ruhe trifft. Wir glauben, dass jeder Mensch einen Moment der Entspannung verdient, einen Raum, um sich schön, gepflegt und erfrischt zu fühlen.</p><a href="https://www.instagram.com/kimmy_nails_au/" target="_blank" rel="noreferrer" aria-label="Instagram">◎</a></div><div class="footer-quick mobile-only"><a href="tel:+4915112354787"><b>☎</b><span>Anrufen</span></a><a href="https://maps.google.com/?q=Hofackerstraße%2010,%2086179%20Augsburg" target="_blank" rel="noreferrer"><b>⌖</b><span>Route</span></a><a href="mailto:kimmynails.de@gmail.com"><b>✉</b><span>E-Mail</span></a></div><div class="footer-groups">
+  <footer class="footer"><div class="footer-main"><div class="footer-brand"><a class="brand" href="index.html">KIMMYNAILS</a><h2>Schönheit &amp; Ruhe</h2><span class="footer-line"></span><p>Ein Ort, an dem Kunstfertigkeit auf Ruhe trifft. Wir glauben, dass jeder Mensch einen Moment der Entspannung verdient – einen Raum, um sich schön, gepflegt und erfrischt zu fühlen.</p><a href="https://www.instagram.com/kimmy_nails_au/" target="_blank" rel="noreferrer" aria-label="Instagram">◎</a></div><div class="footer-quick mobile-only"><a href="tel:+4915112354787"><b>☎</b><span>Anrufen</span></a><a href="https://maps.google.com/?q=Hofackerstraße%2010,%2086179%20Augsburg" target="_blank" rel="noreferrer"><b>⌖</b><span>Route</span></a><a href="mailto:kimmynails.de@gmail.com"><b>✉</b><span>E-Mail</span></a></div><div class="footer-groups">
     <section><button type="button">Navigation &amp; Rechtliches <span>⌄</span></button><h3>Navigation &amp; Rechtliches</h3><div class="footer-link-columns"><div><a href="#about">Über uns</a><a href="#services">Leistungen</a><a href="#gallery">Galerie</a><a href="#booking">Buchung</a><a href="#contact">Kontakt</a></div><div><a href="impressum.html">Impressum</a><a href="datenschutz.html">Datenschutz</a><a href="agb.html">AGB</a></div></div></section>
     <section><button type="button">Kontakt <span>⌄</span></button><h3>Kontakt</h3><div><p>Adresse<br>Hofackerstraße 10, 86179 Augsburg, Deutschland</p><p>Telefon<br><a href="tel:+4915112354787">+49 151 12354787</a></p><p>E-Mail<br><a href="mailto:kimmynails.de@gmail.com">kimmynails.de@gmail.com</a></p></div></section>
     <section><button type="button">Öffnungszeiten <span>⌄</span></button><h3>Öffnungszeiten</h3><div><p>Montag - Samstag<br>9:00 - 20:00</p><p>Sonntag<br>Geschlossen</p><p>Mit oder Ohne Termin</p></div></section>

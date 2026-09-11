@@ -1,14 +1,33 @@
 (() => {
   'use strict';
 
+  document.documentElement.classList.add('js');
+
   const $ = (selector, root = document) => root?.querySelector(selector) ?? null;
   const $$ = (selector, root = document) => root ? [...root.querySelectorAll(selector)] : [];
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+  $$('.hero-copy > span').forEach((line) => {
+    const text = line.textContent;
+    const lineDelay = Number.parseFloat(line.dataset.lineDelay || '0');
+    line.textContent = '';
+    line.setAttribute('aria-hidden', 'true');
+    Array.from(text).forEach((character, index) => {
+      const glyph = document.createElement('span');
+      glyph.className = 'hero-char';
+      glyph.style.setProperty('--char-delay', `${lineDelay + (index * 0.08)}s`);
+      glyph.textContent = character;
+      line.appendChild(glyph);
+    });
+  });
+
   const nav = $('.site-nav');
-  const setNav = () => nav?.classList.toggle('site-nav--solid', window.scrollY > 20 || !$('.hero'));
-  setNav();
-  window.addEventListener('scroll', setNav, { passive: true });
+  const navMarker = $('[data-nav-marker]');
+  if (nav && navMarker && 'IntersectionObserver' in window) {
+    new IntersectionObserver(([entry]) => nav.classList.toggle('site-nav--solid', !entry.isIntersecting), { threshold: 0 }).observe(navMarker);
+  } else if (nav && !$('.hero')) {
+    nav.classList.add('site-nav--solid');
+  }
 
   const menu = $('[data-mobile-menu]');
   const menuButton = $('[data-menu-open]');
@@ -52,7 +71,7 @@
 
   function setupDots(containerSelector, apply, delay = 5000) {
     const container = $(containerSelector);
-    if (!container) return;
+    if (!container) return null;
     const dots = $$('button', container);
     let index = 0;
     let timer;
@@ -64,20 +83,53 @@
     };
     dots.forEach((dot, dotIndex) => dot.addEventListener('click', () => choose(dotIndex, true)));
     if (!reducedMotion && dots.length > 1) timer = window.setInterval(() => choose(index + 1), delay);
+    return { choose, current: () => index };
   }
 
-  setupDots('[data-about-dots]', (dot) => {
+  const aboutSlider = setupDots('[data-about-dots]', (dot) => {
     const image = $('#about-image');
-    if (image) image.src = dot.dataset.image;
-    if ($('#about-title')) $('#about-title').textContent = dot.dataset.title;
-    if ($('#about-text')) $('#about-text').textContent = dot.dataset.text;
+    const copy = $('.about-copy');
+    if (!image) return;
+    image.classList.add('is-changing');
+    copy?.classList.add('is-changing');
+    window.setTimeout(() => {
+      image.src = dot.dataset.image;
+      if ($('#about-title')) $('#about-title').textContent = dot.dataset.title;
+      if ($('#about-text')) $('#about-text').textContent = dot.dataset.text;
+      const finish = () => {
+        image.classList.remove('is-changing');
+        copy?.classList.remove('is-changing');
+      };
+      if (image.complete) finish();
+      else image.addEventListener('load', finish, { once: true });
+    }, reducedMotion ? 0 : 260);
   });
 
   setupDots('[data-review-dots]', (dot) => {
-    $('[data-review-text]').textContent = dot.dataset.text;
-    $('[data-review-name]').textContent = dot.dataset.name;
-    $('[data-review-date]').textContent = dot.dataset.date;
+    const card = $('.review-card');
+    card?.classList.add('is-changing');
+    window.setTimeout(() => {
+      $('[data-review-text]').textContent = dot.dataset.text;
+      $('[data-review-name]').textContent = dot.dataset.name;
+      $('[data-review-date]').textContent = dot.dataset.date;
+      card?.classList.remove('is-changing');
+    }, reducedMotion ? 0 : 220);
   });
+
+  const setupSwipe = (element, onSwipe) => {
+    if (!element) return;
+    let startX = null;
+    element.addEventListener('pointerdown', (event) => { startX = event.clientX; });
+    element.addEventListener('pointerup', (event) => {
+      if (startX === null) return;
+      const distance = event.clientX - startX;
+      startX = null;
+      if (Math.abs(distance) >= 45) onSwipe(distance < 0 ? 1 : -1);
+    });
+    element.addEventListener('pointercancel', () => { startX = null; });
+  };
+
+  setupSwipe($('.about-grid > .organic-frame'), (direction) => aboutSlider?.choose(aboutSlider.current() + direction, true));
 
   const serviceCards = $$('.service-card');
   const serviceDots = $$('[data-service-dots] button');
@@ -90,6 +142,7 @@
   $('[data-service-prev]')?.addEventListener('click', () => showService(serviceIndex - 1));
   $('[data-service-next]')?.addEventListener('click', () => showService(serviceIndex + 1));
   serviceDots.forEach((dot, index) => dot.addEventListener('click', () => showService(index)));
+  setupSwipe($('[data-service-grid]'), (direction) => showService(serviceIndex + direction));
 
   let lastFocused;
   const openModal = (modal) => {
@@ -118,6 +171,7 @@
     galleryExpanded = !galleryExpanded;
     galleryExtra.forEach((item) => { item.hidden = !galleryExpanded; if (galleryExpanded) item.classList.add('is-visible'); });
     galleryToggle.textContent = galleryExpanded ? 'Weniger anzeigen' : 'Alle ansehen';
+    galleryToggle.dataset.label = galleryToggle.textContent;
   });
 
   const lightbox = $('[data-lightbox]');
@@ -143,6 +197,19 @@
     }
     if (activeModal === lightbox && event.key === 'ArrowLeft') updateLightbox(lightboxIndex - 1);
     if (activeModal === lightbox && event.key === 'ArrowRight') updateLightbox(lightboxIndex + 1);
+    if (activeModal && event.key === 'Tab') {
+      const focusable = $$('button, a[href], input, textarea, select, [tabindex]:not([tabindex="-1"])', activeModal).filter((element) => !element.hidden && !element.disabled);
+      if (!focusable.length) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    }
   });
 
   const bookingButtons = $$('.select-list button');
@@ -200,8 +267,9 @@
   }));
 
   const backToTop = $('[data-back-to-top]');
-  const setBackToTop = () => backToTop?.classList.toggle('visible', window.scrollY > 500);
-  setBackToTop();
-  window.addEventListener('scroll', setBackToTop, { passive: true });
+  const backToTopMarker = $('[data-back-to-top-marker]');
+  if (backToTop && backToTopMarker && 'IntersectionObserver' in window) {
+    new IntersectionObserver(([entry]) => backToTop.classList.toggle('visible', !entry.isIntersecting), { threshold: 0 }).observe(backToTopMarker);
+  }
   backToTop?.addEventListener('click', () => window.scrollTo({ top: 0, behavior: reducedMotion ? 'auto' : 'smooth' }));
 })();
