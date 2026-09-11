@@ -22,7 +22,7 @@
 <body>
   <header>
     <nav class="site-nav" aria-label="Hauptnavigation">
-      <a class="brand" href="index.html" aria-label="Zur Startseite">KIMMYNAILS</a>
+      <a class="brand nav-brand" href="index.html" aria-label="Zur Startseite"><span class="nav-brand-label">KIMMYNAILS</span><span class="nav-brand-mask" aria-hidden="true"><span>KIMMYNAILS</span></span></a>
       <div class="desktop-nav">
         <a href="#about">Über uns</a>
         <a href="#services">Leistungen &amp; Preise</a>
@@ -31,7 +31,7 @@
         <a href="#faq">FAQ</a>
         <a href="#contact">Kontakt</a>
       </div>
-      <a class="book-nav mask-button desktop-only" href="#booking" data-label="Buchen">Buchen</a>
+      <a class="book-nav desktop-only" href="#booking"><span class="book-nav-label">Buchen</span><span class="book-nav-fill" aria-hidden="true">Buchen</span></a>
       <button class="menu-button mobile-only" type="button" aria-label="Menü öffnen" aria-expanded="false" data-menu-open><span></span><span></span><span></span></button>
     </nav>
     <div class="mobile-menu" aria-hidden="true" data-mobile-menu>
@@ -50,7 +50,8 @@
       <div class="nav-marker" data-nav-marker></div>
       <div class="back-to-top-marker" data-back-to-top-marker></div>
       <h1 class="hero-copy hero-copy--left" id="hero-title" aria-label="Ruhige Momente. Gepflegte Nägel."><span data-line-delay="0.5">Ruhige</span><span data-line-delay="0.8">Gepflegte</span></h1>
-      <div class="hero-image-wrap"><span class="hero-glow hero-glow--pink" aria-hidden="true"></span><span class="hero-glow hero-glow--gold" aria-hidden="true"></span><span class="hero-glow hero-glow--pink-inner" aria-hidden="true"></span><img class="hero-hand" src="public/images/Hero_Hands.webp" alt="Elegant manikürte Hände mit goldenen Nagelspitzen"><a class="hero-book mask-button" href="#booking" data-label="Buchen">Buchen</a></div>
+      <div class="hero-image-wrap"><span class="hero-glow hero-glow--pink" aria-hidden="true"></span><span class="hero-glow hero-glow--gold" aria-hidden="true"></span><span class="hero-glow hero-glow--pink-inner" aria-hidden="true"></span><div class="hero-hand-motion"><img class="hero-hand" src="public/images/Hero_Hands.webp" alt="Elegant manikürte Hände mit goldenen Nagelspitzen"></div><div class="hero-book-position hero-book-position--mobile mobile-only"><a class="hero-book hero-book--mobile" href="#booking"><span class="hero-book-interaction"><span class="hero-book-label">Buchen</span><span class="hero-book-fill" aria-hidden="true">Buchen</span><span class="hero-book-outline" aria-hidden="true"></span></span></a></div></div>
+      <div class="hero-book-position hero-book-position--desktop desktop-only"><a class="hero-book hero-book--desktop" href="#booking"><span class="hero-book-interaction"><span class="hero-book-label">Buchen</span><span class="hero-book-fill" aria-hidden="true">Buchen</span><span class="hero-book-outline" aria-hidden="true"></span></span></a></div>
       <p class="hero-copy hero-copy--right" aria-hidden="true"><span data-line-delay="1.1">Momente.</span><span data-line-delay="1.4">Nägel.</span></p>
       <div class="hero-fade" aria-hidden="true"></div>
     </section>
@@ -58,8 +59,8 @@
     <section id="about" class="about section-pad">
       <div class="about-grid">
         <span class="section-label about-mobile-label mobile-only">Über uns</span>
-        <div class="organic-frame"><span class="halo halo--gold"></span><span class="halo halo--pink"></span><img id="about-image" src="public/images/studio_pedikure.webp" alt="Behandlung im Kimmy Nails Studio" loading="lazy"></div>
-        <div class="about-copy reveal"><span class="section-label">Über uns</span><h2 id="about-title">Unser Studio</h2><span class="gold-line" aria-hidden="true"></span><p id="about-text">Ein kleines, gepflegtes Studio mit ruhiger Atmosphäre. Reduziert, ordentlich und angenehm gestaltet.</p>
+        <div class="about-media-column"><div class="organic-frame about-media"><span class="halo halo--gold about-halo--one"></span><span class="halo halo--pink about-halo--two"></span><span class="halo halo--gold about-halo--three"></span><span class="halo halo--pink about-halo--four"></span><img id="about-image" src="public/images/studio_pedikure.webp" alt="Behandlung im Kimmy Nails Studio" loading="lazy"></div></div>
+        <div class="about-copy reveal"><span class="section-label">Über uns</span><div class="about-copy-body"><h2 id="about-title">Unser Studio</h2><span class="gold-line" aria-hidden="true"></span><p id="about-text">Ein kleines, gepflegtes Studio mit ruhiger Atmosphäre. Reduziert, ordentlich und angenehm gestaltet.</p></div>
           <div class="slider-dots" aria-label="Studio Bilder" data-about-dots>
             <button class="active" type="button" aria-label="Bild 1 anzeigen" data-title="Unser Studio" data-text="Ein kleines, gepflegtes Studio mit ruhiger Atmosphäre. Reduziert, ordentlich und angenehm gestaltet." data-image="public/images/studio_pedikure.webp"></button>
             <button type="button" aria-label="Bild 2 anzeigen" data-title="Unser Studio" data-text="Wir arbeiten präzise und mit Blick fürs Detail. Saubere Ergebnisse stehen für uns im Vordergrund." data-image="public/images/studio_manicure.webp"></button>
