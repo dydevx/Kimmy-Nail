@@ -20,4 +20,4 @@ python -m http.server 4173
 
 Then open `http://localhost:4173`.
 
-The booking calendar and map remain external embeds. The contact form mirrors the source site's client-side confirmation and does not send data to a backend.
+Booking buttons open https://kimmynailsq56b.setmore.com in a new tab. The booking section also links to Setmore after service selection; selected services are not automatically transferred. The map remains an external embed. The contact form mirrors the source site's client-side confirmation and does not send data to a backend.
