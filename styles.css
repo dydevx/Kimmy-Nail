@@ -3547,6 +3547,15 @@ img {
     text-transform: uppercase;
   }
 
+  .footer-quick-phone {
+    max-width: 100%;
+    font-size: 11px;
+    font-weight: 500;
+    line-height: 1.4;
+    letter-spacing: 0;
+    text-align: center;
+  }
+
   .footer-quick svg,
   .footer-quick b {
     color: var(--gold);
