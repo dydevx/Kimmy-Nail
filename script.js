@@ -334,6 +334,20 @@
   const bookingError = $('[data-booking-error]');
   let selectedServices = [];
 
+  const webcakeHosts = new Set(['kimmynail.de', 'www.kimmynail.de']);
+  const bookingApiOrigin = webcakeHosts.has(window.location.hostname)
+    ? 'https://kimmy-nail.vercel.app'
+    : '';
+  const bookingApiUrl = (path) => `${bookingApiOrigin}${path}`;
+
+  const readApiPayload = async (response) => {
+    const contentType = response.headers.get('content-type') || '';
+    if (!contentType.toLowerCase().includes('application/json')) {
+      throw new Error('Das Buchungssystem ist momentan nicht erreichbar. Bitte versuchen Sie es erneut.');
+    }
+    return response.json();
+  };
+
   const localIsoDate = () => {
     const now = new Date();
     const offset = now.getTimezoneOffset() * 60_000;
@@ -383,8 +397,8 @@
     bookingTime.innerHTML = '<option value="">Freie Zeiten werden geladen…</option>';
     availabilityMessage.textContent = 'Verfügbarkeit wird geladen…';
     try {
-      const response = await fetch(`/api/availability?date=${encodeURIComponent(bookingDate.value)}`, { cache: 'no-store' });
-      const payload = await response.json();
+      const response = await fetch(bookingApiUrl(`/api/availability?date=${encodeURIComponent(bookingDate.value)}`), { cache: 'no-store' });
+      const payload = await readApiPayload(response);
       if (!response.ok) throw new Error(payload.error || 'Verfügbarkeit konnte nicht geladen werden.');
       const previousTime = bookingTime.dataset.selectedTime || '';
       bookingTime.replaceChildren(new Option('Uhrzeit wählen', ''));
@@ -456,12 +470,12 @@
     confirmButton.textContent = 'Wird gebucht…';
     bookingError.hidden = true;
     try {
-      const response = await fetch('/api/bookings', {
+      const response = await fetch(bookingApiUrl('/api/bookings'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(bookingValues())
       });
-      const payload = await response.json();
+      const payload = await readApiPayload(response);
       if (!response.ok) throw new Error(payload.error || 'Die Buchung konnte nicht gespeichert werden.');
       renderBookingSummary($('[data-booking-success-summary]'), payload.booking);
       $('[data-cancel-link]').href = payload.cancel_url;

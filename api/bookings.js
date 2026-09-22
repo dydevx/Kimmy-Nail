@@ -2,9 +2,10 @@
 
 const { createBooking } = require('../lib/supabase-bookings');
 const { bookingCancelUrl, buildWhatsAppUrl } = require('../lib/whatsapp');
-const { assertMethod, handleError, readJson, sendJson } = require('../lib/vercel-api');
+const { allowBookingCors, assertMethod, handleError, readJson, sendJson } = require('../lib/vercel-api');
 
 module.exports = async function bookingsHandler(request, response) {
+  if (allowBookingCors(request, response, ['POST', 'OPTIONS'])) return;
   try {
     assertMethod(request, ['POST']);
     const booking = await createBooking(await readJson(request));

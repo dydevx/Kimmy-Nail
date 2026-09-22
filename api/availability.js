@@ -1,9 +1,10 @@
 'use strict';
 
 const { getAvailability } = require('../lib/supabase-bookings');
-const { assertMethod, handleError, sendJson } = require('../lib/vercel-api');
+const { allowBookingCors, assertMethod, handleError, sendJson } = require('../lib/vercel-api');
 
 module.exports = async function availabilityHandler(request, response) {
+  if (allowBookingCors(request, response, ['GET', 'OPTIONS'])) return;
   try {
     assertMethod(request, ['GET']);
     const url = new URL(request.url, `https://${request.headers.host}`);
