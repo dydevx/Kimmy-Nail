@@ -3,6 +3,7 @@
 const assert = require('node:assert/strict');
 const test = require('node:test');
 const { bookingCancelUrl, buildWhatsAppUrl } = require('../lib/whatsapp');
+const { formatDateValue } = require('../lib/supabase-bookings');
 
 const booking = {
   booking_id: '4dfcc98f-34d3-4fd4-ad03-e834e0593bf4',
@@ -38,4 +39,9 @@ test('creates a prefilled WhatsApp message without service prices', () => {
   assert.match(message, /Handpflege — Maniküre/);
   assert.match(message, /https:\/\/example.com\/cancel/);
   assert.doesNotMatch(message, /€|Preis|price/i);
+});
+
+test('formats PostgreSQL date values as ISO calendar dates', () => {
+  assert.equal(formatDateValue(new Date('2000-01-03T00:00:00.000Z')), '2000-01-03');
+  assert.equal(formatDateValue('2030-06-10'), '2030-06-10');
 });
