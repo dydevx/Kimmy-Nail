@@ -33,7 +33,7 @@ For local `npm start` development, bookings are stored in `data/bookings.db`. Th
 1. Run `supabase/schema.sql` in the Supabase SQL Editor.
 2. Add the Supabase Transaction Pooler connection string as the sensitive Vercel environment variable `DATABASE_URL`.
 3. Add `ADMIN_KEY` for the admin page.
-4. Optionally set `WHATSAPP_NUMBER` in international format without `+`, spaces or dashes. It defaults to `4982144917851`.
+4. Optionally set `WHATSAPP_NUMBER` in international format without `+`, spaces or dashes. It defaults to `4915141335015`.
 5. Redeploy without the previous build cache.
 
 The Vercel API stores the booking first. Only after a successful insert does the browser open a prefilled WhatsApp message containing the booking details and cancellation link.

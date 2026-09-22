@@ -33,7 +33,7 @@ test('creates an absolute cancellation URL behind Vercel proxy', () => {
 test('creates a prefilled WhatsApp message without service prices', () => {
   const url = new URL(buildWhatsAppUrl(booking, 'https://example.com/cancel'));
   assert.equal(url.hostname, 'wa.me');
-  assert.equal(url.pathname, '/4982144917851');
+  assert.equal(url.pathname, '/4915141335015');
   const message = url.searchParams.get('text');
   assert.match(message, /Maria Test/);
   assert.match(message, /Handpflege — Maniküre/);
