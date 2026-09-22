@@ -1,0 +1,16 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": null,
+  "buildCommand": "",
+  "outputDirectory": ".",
+  "rewrites": [
+    {
+      "source": "/booking/cancel",
+      "destination": "/cancel.html"
+    },
+    {
+      "source": "/admin/bookings",
+      "destination": "/admin.html"
+    }
+  ]
+}

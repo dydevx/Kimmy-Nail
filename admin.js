@@ -23,10 +23,10 @@
   const updateStatus = async (bookingId, status) => {
     if (status === 'cancelled' && !window.confirm('Bạn có chắc chắn muốn hủy lịch này không?')) return;
     try {
-      const response = await fetch(`/api/admin/bookings/${encodeURIComponent(bookingId)}/status`, {
+      const response = await fetch('/api/admin-booking-status', {
         method: 'PATCH',
         headers: adminHeaders(true),
-        body: JSON.stringify({ status })
+        body: JSON.stringify({ booking_id: bookingId, status })
       });
       const payload = await response.json();
       if (!response.ok) throw new Error(payload.error);
@@ -89,7 +89,7 @@
     if (values.get('status')) query.set('status', values.get('status'));
     rows.innerHTML = '<tr><td colspan="7" class="empty-state">Buchungen werden geladen…</td></tr>';
     try {
-      const response = await fetch(`/api/admin/bookings?${query}`, { headers: adminHeaders(), cache: 'no-store' });
+      const response = await fetch(`/api/admin-bookings?${query}`, { headers: adminHeaders(), cache: 'no-store' });
       const payload = await response.json();
       if (!response.ok) throw new Error(payload.error);
       renderRows(payload.bookings);

@@ -4,6 +4,7 @@ const fs = require('node:fs');
 const http = require('node:http');
 const path = require('node:path');
 const { BookingError, BookingStore } = require('./lib/booking-store');
+const { bookingCancelUrl, buildWhatsAppUrl } = require('./lib/whatsapp');
 
 const ROOT = __dirname;
 const DATA_DIR = path.join(ROOT, 'data');
@@ -70,6 +71,7 @@ async function handleApi(request, response, url) {
 
   if (request.method === 'POST' && url.pathname === '/api/bookings') {
     const booking = store.createBooking(await readJson(request));
+    const cancelUrl = bookingCancelUrl(request, booking);
     return sendJson(response, 201, {
       booking: {
         booking_id: booking.booking_id,
@@ -81,22 +83,23 @@ async function handleApi(request, response, url) {
         notes: booking.notes,
         status: booking.status
       },
-      cancel_url: `/booking/cancel?id=${encodeURIComponent(booking.booking_id)}&token=${encodeURIComponent(booking.cancel_token)}`
+      cancel_url: cancelUrl,
+      whatsapp_url: buildWhatsAppUrl(booking, cancelUrl)
     });
   }
 
-  if (request.method === 'GET' && url.pathname === '/api/booking/cancel') {
+  if (request.method === 'GET' && (url.pathname === '/api/booking/cancel' || url.pathname === '/api/cancel-booking')) {
     const booking = store.getBookingForCancellation(url.searchParams.get('id'), url.searchParams.get('token'));
     return sendJson(response, 200, { booking });
   }
 
-  if (request.method === 'POST' && url.pathname === '/api/booking/cancel') {
+  if (request.method === 'POST' && (url.pathname === '/api/booking/cancel' || url.pathname === '/api/cancel-booking')) {
     const input = await readJson(request);
     const booking = store.cancelBooking(input.id, input.token);
     return sendJson(response, 200, { booking, message: 'Lịch hẹn của bạn đã được hủy thành công.' });
   }
 
-  if (url.pathname === '/api/admin/bookings' && request.method === 'GET') {
+  if ((url.pathname === '/api/admin/bookings' || url.pathname === '/api/admin-bookings') && request.method === 'GET') {
     assertAdmin(request);
     const bookings = store.listBookings({
       date: url.searchParams.get('date') || undefined,
@@ -110,6 +113,13 @@ async function handleApi(request, response, url) {
     assertAdmin(request);
     const input = await readJson(request);
     const booking = store.setBookingStatus(decodeURIComponent(statusMatch[1]), input.status);
+    return sendJson(response, 200, { booking });
+  }
+
+  if (url.pathname === '/api/admin-booking-status' && request.method === 'PATCH') {
+    assertAdmin(request);
+    const input = await readJson(request);
+    const booking = store.setBookingStatus(input.booking_id, input.status);
     return sendJson(response, 200, { booking });
   }
 

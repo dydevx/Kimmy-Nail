@@ -450,6 +450,8 @@
 
   $('[data-booking-confirm]')?.addEventListener('click', async (event) => {
     const confirmButton = event.currentTarget;
+    const whatsappWindow = window.open('about:blank', '_blank');
+    if (whatsappWindow) whatsappWindow.opener = null;
     confirmButton.disabled = true;
     confirmButton.textContent = 'Wird gebucht…';
     bookingError.hidden = true;
@@ -463,9 +465,12 @@
       if (!response.ok) throw new Error(payload.error || 'Die Buchung konnte nicht gespeichert werden.');
       renderBookingSummary($('[data-booking-success-summary]'), payload.booking);
       $('[data-cancel-link]').href = payload.cancel_url;
+      $('[data-whatsapp-link]').href = payload.whatsapp_url;
       $('[data-booking-review-step]').hidden = true;
       $('[data-booking-success]').hidden = false;
+      if (whatsappWindow) whatsappWindow.location.replace(payload.whatsapp_url);
     } catch (error) {
+      whatsappWindow?.close();
       bookingError.textContent = error.message;
       bookingError.hidden = false;
       await loadAvailability();

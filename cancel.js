@@ -51,7 +51,7 @@
       return;
     }
     try {
-      const response = await fetch(`/api/booking/cancel?id=${encodeURIComponent(id)}&token=${encodeURIComponent(token)}`, { cache: 'no-store' });
+      const response = await fetch(`/api/cancel-booking?id=${encodeURIComponent(id)}&token=${encodeURIComponent(token)}`, { cache: 'no-store' });
       const payload = await response.json();
       if (!response.ok) throw new Error(payload.error);
       render(payload.booking);
@@ -67,7 +67,7 @@
     if (!window.confirm('Bạn có chắc chắn muốn hủy lịch này không?')) return;
     button.disabled = true;
     try {
-      const response = await fetch('/api/booking/cancel', {
+      const response = await fetch('/api/cancel-booking', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ id, token })
