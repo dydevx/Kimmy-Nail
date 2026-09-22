@@ -326,26 +326,162 @@
 
   const bookingButtons = $$('.select-list button');
   const bookingNext = $('[data-booking-next]');
+  const bookingBack = $('[data-booking-back]');
+  const bookingForm = $('[data-booking-form]');
+  const bookingDate = $('[data-booking-date]');
+  const bookingTime = $('[data-booking-time]');
+  const availabilityMessage = $('[data-availability-message]');
+  const bookingError = $('[data-booking-error]');
+  let selectedServices = [];
+
+  const localIsoDate = () => {
+    const now = new Date();
+    const offset = now.getTimezoneOffset() * 60_000;
+    return new Date(now.getTime() - offset).toISOString().slice(0, 10);
+  };
+
+  const getSelectedServices = () => bookingButtons
+    .filter((button) => button.classList.contains('selected'))
+    .map((button) => {
+      const category = $('h4', button.closest('section'))?.textContent.trim();
+      const service = $('span', button)?.textContent.trim();
+      return category ? `${category} — ${service}` : service;
+    });
+
+  const bookingValues = () => {
+    const values = Object.fromEntries(new FormData(bookingForm).entries());
+    return { ...values, service: selectedServices.join(', ') };
+  };
+
+  const formatBookingDate = (value) => {
+    if (!value) return '';
+    return new Intl.DateTimeFormat('de-DE', { dateStyle: 'long', timeZone: 'UTC' }).format(new Date(`${value}T00:00:00Z`));
+  };
+
+  const renderBookingSummary = (container, booking) => {
+    if (!container) return;
+    const fields = [
+      ['Name', booking.customer_name],
+      ['Telefon', booking.phone],
+      ['Leistungen', booking.service],
+      ['Datum', formatBookingDate(booking.booking_date)],
+      ['Uhrzeit', booking.booking_time],
+      ...(booking.notes ? [['Notiz', booking.notes]] : [])
+    ];
+    container.replaceChildren(...fields.flatMap(([label, value]) => {
+      const term = document.createElement('dt');
+      const detail = document.createElement('dd');
+      term.textContent = label;
+      detail.textContent = value;
+      return [term, detail];
+    }));
+  };
+
+  const loadAvailability = async () => {
+    if (!bookingDate?.value) return;
+    bookingTime.disabled = true;
+    bookingTime.innerHTML = '<option value="">Freie Zeiten werden geladen…</option>';
+    availabilityMessage.textContent = 'Verfügbarkeit wird geladen…';
+    try {
+      const response = await fetch(`/api/availability?date=${encodeURIComponent(bookingDate.value)}`, { cache: 'no-store' });
+      const payload = await response.json();
+      if (!response.ok) throw new Error(payload.error || 'Verfügbarkeit konnte nicht geladen werden.');
+      const previousTime = bookingTime.dataset.selectedTime || '';
+      bookingTime.replaceChildren(new Option('Uhrzeit wählen', ''));
+      payload.slots.forEach((slot) => {
+        const label = slot.capacity === 3
+          ? `${slot.time} — ${slot.remaining ? `Noch ${slot.remaining} ${slot.remaining === 1 ? 'Platz' : 'Plätze'}` : 'Ausgebucht'}`
+          : `${slot.time} — ${slot.available ? 'Verfügbar' : 'Ausgebucht'}`;
+        const option = new Option(label, slot.time, false, slot.time === previousTime && slot.available);
+        option.disabled = !slot.available;
+        bookingTime.append(option);
+      });
+      bookingTime.disabled = false;
+      availabilityMessage.textContent = 'Volle Zeiten können nicht ausgewählt werden.';
+    } catch (error) {
+      bookingTime.replaceChildren(new Option('Keine Zeiten verfügbar', ''));
+      availabilityMessage.textContent = error.message;
+    }
+  };
+
+  if (bookingDate) {
+    bookingDate.min = localIsoDate();
+    bookingDate.addEventListener('change', () => {
+      bookingTime.dataset.selectedTime = '';
+      loadAvailability();
+    });
+  }
+  bookingTime?.addEventListener('change', () => { bookingTime.dataset.selectedTime = bookingTime.value; });
+
   bookingButtons.forEach((button) => button.addEventListener('click', () => {
     button.classList.toggle('selected');
+    button.setAttribute('aria-pressed', String(button.classList.contains('selected')));
     bookingNext.disabled = !bookingButtons.some((item) => item.classList.contains('selected'));
   }));
+
   bookingNext?.addEventListener('click', () => {
-    const names = bookingButtons.filter((button) => button.classList.contains('selected')).map((button) => $('span', button).textContent);
-    $('[data-selected-services]').textContent = names.join(', ');
+    selectedServices = getSelectedServices();
+    $('[data-selected-services]').textContent = selectedServices.join(', ');
     $('[data-booking-services]').hidden = true;
     $('[data-calendar-step]').hidden = false;
     bookingNext.hidden = true;
-    $('[data-booking-back]').hidden = false;
+    bookingBack.hidden = false;
     $('[data-step-one]').textContent = '✓';
     $('[data-step-line]').classList.add('active');
     $('[data-step-two]').classList.add('active');
   });
-  $('[data-booking-back]')?.addEventListener('click', () => {
+
+  $('[data-booking-review]')?.addEventListener('click', () => {
+    if (!bookingForm.reportValidity()) return;
+    const booking = bookingValues();
+    renderBookingSummary($('[data-booking-summary]'), booking);
+    bookingError.hidden = true;
+    $('[data-booking-form-step]').hidden = true;
+    $('[data-booking-review-step]').hidden = false;
+    bookingBack.hidden = true;
+  });
+
+  $('[data-booking-edit]')?.addEventListener('click', () => {
+    $('[data-booking-form-step]').hidden = false;
+    $('[data-booking-review-step]').hidden = true;
+    bookingBack.hidden = false;
+    loadAvailability();
+  });
+
+  $('[data-booking-confirm]')?.addEventListener('click', async (event) => {
+    const confirmButton = event.currentTarget;
+    confirmButton.disabled = true;
+    confirmButton.textContent = 'Wird gebucht…';
+    bookingError.hidden = true;
+    try {
+      const response = await fetch('/api/bookings', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(bookingValues())
+      });
+      const payload = await response.json();
+      if (!response.ok) throw new Error(payload.error || 'Die Buchung konnte nicht gespeichert werden.');
+      renderBookingSummary($('[data-booking-success-summary]'), payload.booking);
+      $('[data-cancel-link]').href = payload.cancel_url;
+      $('[data-booking-review-step]').hidden = true;
+      $('[data-booking-success]').hidden = false;
+    } catch (error) {
+      bookingError.textContent = error.message;
+      bookingError.hidden = false;
+      await loadAvailability();
+    } finally {
+      confirmButton.disabled = false;
+      confirmButton.textContent = 'Termin bestätigen';
+    }
+  });
+
+  bookingBack?.addEventListener('click', () => {
     $('[data-booking-services]').hidden = false;
     $('[data-calendar-step]').hidden = true;
+    $('[data-booking-form-step]').hidden = false;
+    $('[data-booking-review-step]').hidden = true;
     bookingNext.hidden = false;
-    $('[data-booking-back]').hidden = true;
+    bookingBack.hidden = true;
     $('[data-step-one]').textContent = '1';
     $('[data-step-line]').classList.remove('active');
     $('[data-step-two]').classList.remove('active');

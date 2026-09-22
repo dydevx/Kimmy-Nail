@@ -1,0 +1,13 @@
+{
+  "name": "kimmy-nails",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Kimmy Nails website and appointment booking service",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node --test"
+  },
+  "engines": {
+    "node": ">=22.5.0"
+  }
+}

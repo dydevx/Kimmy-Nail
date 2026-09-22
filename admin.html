@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Buchungen verwalten – Kimmy Nails</title>
+  <link rel="icon" href="/public/favicon.png">
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="/booking-pages.css">
+  <script src="/admin.js" defer></script>
+</head>
+<body>
+  <main class="booking-page">
+    <header class="booking-page-header"><a class="brand" href="/">KIMMYNAILS</a><a href="/">← Zur Website</a></header>
+    <section class="admin-shell">
+      <h1>Buchungen verwalten</h1>
+      <p class="admin-intro">Bestätigte, stornierte und abgeschlossene Termine bleiben vollständig in der Historie erhalten.</p>
+      <form class="admin-toolbar" data-admin-filters>
+        <label><span>Datum</span><input type="date" name="date"></label>
+        <label><span>Status</span><select name="status"><option value="">Alle Status</option><option value="confirmed">Confirmed</option><option value="cancelled">Cancelled</option><option value="completed">Completed</option></select></label>
+        <label><span>Admin-Schlüssel (falls eingerichtet)</span><input type="password" name="admin_key" autocomplete="current-password"></label>
+        <button class="gold-button" type="submit">Aktualisieren</button>
+      </form>
+      <p class="page-message" role="alert" hidden data-admin-message></p>
+      <div class="booking-table-wrap">
+        <table class="booking-table">
+          <thead><tr><th>Name</th><th>Telefon</th><th>Leistungen</th><th>Datum</th><th>Uhrzeit</th><th>Status</th><th>Aktion</th></tr></thead>
+          <tbody data-booking-rows><tr><td colspan="7" class="empty-state">Buchungen werden geladen…</td></tr></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
