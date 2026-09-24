@@ -5,7 +5,7 @@ const fs = require('node:fs');
 const os = require('node:os');
 const path = require('node:path');
 const test = require('node:test');
-const { BookingStore, SLOT_FULL_MESSAGE, getSlotCapacity } = require('../lib/booking-store');
+const { BookingStore, SLOT_FULL_MESSAGE, generateSlots, getSlotCapacity } = require('../lib/booking-store');
 
 function withStore(run) {
   const tempDirectory = fs.mkdtempSync(path.join(os.tmpdir(), 'kimmy-bookings-'));
@@ -28,6 +28,17 @@ function input(time, suffix = '') {
     notes: ''
   };
 }
+
+test('the final booking slot is 19:00', () => {
+  const slots = generateSlots();
+  assert.equal(slots.at(-1), '19:00');
+  assert.equal(slots.includes('19:05'), false);
+});
+
+test('bookings after 19:00 are rejected', () => withStore((store) => {
+  assert.throws(() => store.createBooking(input('19:05')), { code: 'INVALID_TIME' });
+  assert.equal(store.createBooking(input('19:00')).booking_time, '19:00');
+}));
 
 test('whole-hour slots allow three active bookings, then reject the fourth', () => withStore((store) => {
   assert.equal(getSlotCapacity('10:00'), 3);

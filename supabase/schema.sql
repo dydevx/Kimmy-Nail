@@ -13,14 +13,33 @@ create table if not exists public.bookings (
     check (status in ('confirmed', 'cancelled', 'completed')),
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now(),
-  constraint booking_time_business_hours
-    check (booking_time >= time '09:00' and booking_time < time '20:00'),
   constraint booking_time_five_minutes
     check (
       mod(extract(minute from booking_time)::integer, 5) = 0
       and extract(second from booking_time) = 0
     )
 );
+
+-- Keep existing late appointments as history, but only allow new bookings through 19:00.
+alter table public.bookings
+  drop constraint if exists booking_time_business_hours;
+
+alter table public.bookings
+  add constraint booking_time_business_hours
+  check (booking_time >= time '09:00' and booking_time <= time '19:00')
+  not valid;
+
+do $$
+begin
+  if not exists (
+    select 1
+    from public.bookings
+    where booking_time < time '09:00' or booking_time > time '19:00'
+  ) then
+    alter table public.bookings validate constraint booking_time_business_hours;
+  end if;
+end;
+$$;
 
 create index if not exists bookings_slot_status_idx
   on public.bookings (booking_date, booking_time, status);
