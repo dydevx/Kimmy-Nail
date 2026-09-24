@@ -41,6 +41,30 @@ test('handles booking API preflight without querying the database', () => {
   assert.equal(response.headers.get('access-control-allow-methods'), 'POST, OPTIONS');
 });
 
+test('allows local static previews to call the production booking API', () => {
+  for (const origin of ['http://localhost:5500', 'http://127.0.0.1:8080']) {
+    const response = responseMock();
+    allowBookingCors(
+      { method: 'GET', headers: { origin } },
+      response,
+      ['GET', 'OPTIONS']
+    );
+
+    assert.equal(response.headers.get('access-control-allow-origin'), origin);
+  }
+});
+
+test('allows the Webcake preview to call booking APIs', () => {
+  const response = responseMock();
+  allowBookingCors(
+    { method: 'GET', headers: { origin: 'https://preview.webcake.io' } },
+    response,
+    ['GET', 'OPTIONS']
+  );
+
+  assert.equal(response.headers.get('access-control-allow-origin'), 'https://preview.webcake.io');
+});
+
 test('does not grant cross-origin access to unknown websites', () => {
   const response = responseMock();
   allowBookingCors(

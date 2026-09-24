@@ -334,10 +334,13 @@
   const bookingError = $('[data-booking-error]');
   let selectedServices = [];
 
-  const webcakeHosts = new Set(['kimmynail.de', 'www.kimmynail.de']);
-  const bookingApiOrigin = webcakeHosts.has(window.location.hostname)
-    ? 'https://kimmy-nail.vercel.app'
-    : '';
+  const bookingApiServer = 'https://kimmy-nail.vercel.app';
+  const isVercelBookingHost = window.location.hostname === 'kimmy-nail.vercel.app';
+  const isLocalBookingServer = ['localhost', '127.0.0.1'].includes(window.location.hostname)
+    && window.location.port === '4173';
+  const bookingApiOrigin = isVercelBookingHost || isLocalBookingServer
+    ? ''
+    : bookingApiServer;
   const bookingApiUrl = (path) => `${bookingApiOrigin}${path}`;
 
   const readApiPayload = async (response) => {
