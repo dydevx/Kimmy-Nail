@@ -450,6 +450,7 @@
 
   $('[data-booking-review]')?.addEventListener('click', () => {
     if (!bookingForm.reportValidity()) return;
+    $('[data-booking-confirm]').disabled = false;
     const booking = bookingValues();
     renderBookingSummary($('[data-booking-summary]'), booking);
     bookingError.hidden = true;
@@ -467,6 +468,7 @@
 
   $('[data-booking-confirm]')?.addEventListener('click', async (event) => {
     const confirmButton = event.currentTarget;
+    let slotJustFilled = false;
     const whatsappWindow = window.open('about:blank', '_blank');
     if (whatsappWindow) whatsappWindow.opener = null;
     confirmButton.disabled = true;
@@ -479,7 +481,11 @@
         body: JSON.stringify(bookingValues())
       });
       const payload = await readApiPayload(response);
-      if (!response.ok) throw new Error(payload.error || 'Die Buchung konnte nicht gespeichert werden.');
+      if (!response.ok) {
+        const bookingRequestError = new Error(payload.error || 'Die Buchung konnte nicht gespeichert werden.');
+        bookingRequestError.code = payload.code;
+        throw bookingRequestError;
+      }
       renderBookingSummary($('[data-booking-success-summary]'), payload.booking);
       $('[data-cancel-link]').href = payload.cancel_url;
       $('[data-whatsapp-link]').href = payload.whatsapp_url;
@@ -491,8 +497,9 @@
       bookingError.textContent = error.message;
       bookingError.hidden = false;
       await loadAvailability();
+      slotJustFilled = error.code === 'SLOT_FULL';
     } finally {
-      confirmButton.disabled = false;
+      confirmButton.disabled = slotJustFilled;
       confirmButton.textContent = 'Termin bestätigen';
     }
   });

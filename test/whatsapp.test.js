@@ -2,7 +2,7 @@
 
 const assert = require('node:assert/strict');
 const test = require('node:test');
-const { bookingCancelUrl, buildWhatsAppUrl } = require('../lib/whatsapp');
+const { bookingCancelUrl, buildCancellationWhatsAppUrl, buildWhatsAppUrl } = require('../lib/whatsapp');
 const { formatDateValue } = require('../lib/supabase-bookings');
 
 const booking = {
@@ -39,6 +39,20 @@ test('creates a prefilled WhatsApp message without service prices', () => {
   assert.match(message, /Handpflege — Maniküre/);
   assert.match(message, /https:\/\/example.com\/cancel/);
   assert.doesNotMatch(message, /€|Preis|price/i);
+});
+
+test('creates a prefilled WhatsApp cancellation notification for the salon', () => {
+  const url = new URL(buildCancellationWhatsAppUrl(booking));
+  assert.equal(url.hostname, 'wa.me');
+  assert.equal(url.pathname, '/4915112354787');
+  const message = url.searchParams.get('text');
+  assert.match(message, /Terminabsage bei Kimmy Nails/);
+  assert.match(message, /Maria Test/);
+  assert.match(message, /2030-06-10/);
+  assert.match(message, /10:00/);
+  assert.match(message, /Status: Storniert/);
+  assert.match(message, /Stornierungslink abgesagt/);
+  assert.doesNotMatch(message, /secret-token/);
 });
 
 test('formats PostgreSQL date values as ISO calendar dates', () => {

@@ -8,6 +8,7 @@
   const content = document.querySelector('[data-cancel-content]');
   const summary = document.querySelector('[data-cancel-summary]');
   const button = document.querySelector('[data-cancel-button]');
+  const whatsappLink = document.querySelector('[data-cancel-whatsapp]');
   const message = document.querySelector('[data-cancel-message]');
 
   const showMessage = (text, success = false) => {
@@ -65,6 +66,8 @@
 
   button.addEventListener('click', async () => {
     if (!window.confirm('Bạn có chắc chắn muốn hủy lịch này không?')) return;
+    const whatsappWindow = window.open('about:blank', '_blank');
+    if (whatsappWindow) whatsappWindow.opener = null;
     button.disabled = true;
     try {
       const response = await fetch('/api/cancel-booking', {
@@ -75,8 +78,12 @@
       const payload = await response.json();
       if (!response.ok) throw new Error(payload.error);
       button.hidden = true;
-      showMessage('Lịch hẹn của bạn đã được hủy thành công.', true);
+      whatsappLink.href = payload.whatsapp_url;
+      whatsappLink.hidden = false;
+      showMessage('Lịch hẹn của bạn đã được hủy thành công. Bitte senden Sie die vorbereitete WhatsApp-Nachricht an den Salon.', true);
+      if (whatsappWindow) whatsappWindow.location.replace(payload.whatsapp_url);
     } catch (error) {
+      whatsappWindow?.close();
       button.disabled = false;
       showMessage(error.message || 'Không thể hủy lịch hẹn.');
     }

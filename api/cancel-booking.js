@@ -1,6 +1,7 @@
 'use strict';
 
 const { cancelBooking, getBookingForCancellation } = require('../lib/supabase-bookings');
+const { buildCancellationWhatsAppUrl } = require('../lib/whatsapp');
 const { assertMethod, handleError, readJson, sendJson } = require('../lib/vercel-api');
 
 module.exports = async function cancelBookingHandler(request, response) {
@@ -13,7 +14,11 @@ module.exports = async function cancelBookingHandler(request, response) {
     }
     const input = await readJson(request);
     const booking = await cancelBooking(input.id, input.token);
-    return sendJson(response, 200, { booking, message: 'Lịch hẹn của bạn đã được hủy thành công.' });
+    return sendJson(response, 200, {
+      booking,
+      message: 'Lịch hẹn của bạn đã được hủy thành công.',
+      whatsapp_url: buildCancellationWhatsAppUrl(booking)
+    });
   } catch (error) {
     return handleError(response, error);
   }

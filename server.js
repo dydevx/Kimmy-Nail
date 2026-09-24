@@ -4,7 +4,7 @@ const fs = require('node:fs');
 const http = require('node:http');
 const path = require('node:path');
 const { BookingError, BookingStore } = require('./lib/booking-store');
-const { bookingCancelUrl, buildWhatsAppUrl } = require('./lib/whatsapp');
+const { bookingCancelUrl, buildCancellationWhatsAppUrl, buildWhatsAppUrl } = require('./lib/whatsapp');
 
 const ROOT = __dirname;
 const DATA_DIR = path.join(ROOT, 'data');
@@ -96,7 +96,11 @@ async function handleApi(request, response, url) {
   if (request.method === 'POST' && (url.pathname === '/api/booking/cancel' || url.pathname === '/api/cancel-booking')) {
     const input = await readJson(request);
     const booking = store.cancelBooking(input.id, input.token);
-    return sendJson(response, 200, { booking, message: 'Lịch hẹn của bạn đã được hủy thành công.' });
+    return sendJson(response, 200, {
+      booking,
+      message: 'Lịch hẹn của bạn đã được hủy thành công.',
+      whatsapp_url: buildCancellationWhatsAppUrl(booking)
+    });
   }
 
   if ((url.pathname === '/api/admin/bookings' || url.pathname === '/api/admin-bookings') && request.method === 'GET') {

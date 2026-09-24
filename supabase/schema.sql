@@ -13,12 +13,22 @@ create table if not exists public.bookings (
     check (status in ('confirmed', 'cancelled', 'completed')),
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now(),
-  constraint booking_time_five_minutes
-    check (
-      mod(extract(minute from booking_time)::integer, 5) = 0
-      and extract(second from booking_time) = 0
-    )
+  constraint booking_time_whole_minute
+    check (extract(second from booking_time) = 0)
 );
+
+-- Replace the old five-minute rule without touching existing booking rows.
+-- The capacity trigger below enforces :00, :30 and :45 for new active bookings.
+alter table public.bookings
+  drop constraint if exists booking_time_five_minutes;
+
+alter table public.bookings
+  drop constraint if exists booking_time_whole_minute;
+
+alter table public.bookings
+  add constraint booking_time_whole_minute
+  check (extract(second from booking_time) = 0)
+  not valid;
 
 -- Keep existing late appointments as history, but only allow new bookings through 19:00.
 alter table public.bookings
@@ -77,6 +87,26 @@ declare
   current_booking_count integer;
   slot_key bigint;
 begin
+  if extract(minute from new.booking_time) not in (0, 30, 45) then
+    -- Legacy bookings stay manageable: they may still be completed or
+    -- cancelled, but cannot be reactivated or moved to another legacy slot.
+    if tg_op = 'INSERT' then
+      raise exception using
+        errcode = '22007',
+        message = 'Giờ đặt lịch không hợp lệ.';
+    end if;
+
+    if new.booking_date is distinct from old.booking_date
+      or new.booking_time is distinct from old.booking_time
+      or (old.status = 'cancelled' and new.status <> 'cancelled') then
+      raise exception using
+        errcode = '22007',
+        message = 'Giờ đặt lịch không hợp lệ.';
+    end if;
+
+    return new;
+  end if;
+
   if new.status = 'cancelled' then
     return new;
   end if;
